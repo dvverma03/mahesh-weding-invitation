@@ -10,13 +10,22 @@ const CASA =
 
 const events = [
   {
+    title: "Tilak Ceremony",
+    date: "1 May 2026",
+    time: "Afternoon",
+    venue: "Paterha Maglpur, Post Dandopur, Kushinagar, Uttar Pradesh",
+    icon: "🪔",
+    description:
+      "The auspicious beginning marked by prayers and blessings, officially commencing the joyous wedding festivities.",
+  },
+  {
     title: "Haldi & Mehndi",
     date: "4 May 2026",
     time: "Evening",
     venue: "Paterha Maglpur, Post Dandopur, Kushinagar, Uttar Pradesh",
     icon: "🌿",
     description:
-      "Start the celebrations with colour and tradition — haldi blessings and intricate mehndi artistry.",
+      "A vibrant celebration of colors and tradition. Join us for the playful haldi rituals and beautiful mehndi artistry.",
   },
   {
     title: "Wedding Ceremony",
@@ -25,17 +34,8 @@ const events = [
     venue: "Paterha Maglpur, Post Dandopur, Kushinagar, Uttar Pradesh",
     icon: "💍",
     description:
-      "The main event — an evening of vows, rituals, and memories that will last a lifetime.",
+      "The beautiful union of two souls. An evening of sacred vows, traditional rituals, and unforgettable memories.",
     featured: true,
-  },
-  {
-    title: "Vidai",
-    date: "7 May 2026",
-    time: "Morning",
-    venue: "Paterha Maglpur, Post Dandopur, Kushinagar, Uttar Pradesh",
-    icon: "🌸",
-    description:
-      "A bittersweet and beautiful farewell as Mahesh begins her new journey.",
   },
 ];
 
