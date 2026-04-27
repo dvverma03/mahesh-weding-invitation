@@ -386,22 +386,22 @@ export default function CoupleAnimation() {
           className="relative flex items-end justify-center w-full"
           style={{ height: avatarH }}
         >
-          {/* Bride */}
+          {/* Groom */}
           <motion.div
             className="absolute bottom-0 flex flex-col items-center"
-            style={{ x: brideX, y: brideY }}
+            style={{ x: groomX, y: groomY }}
           >
             <motion.div
               className="absolute -inset-8 rounded-full pointer-events-none"
               style={{
                 opacity: avatarGlow,
                 background:
-                  "radial-gradient(circle, rgba(168,100,136,0.3) 0%, transparent 70%)",
+                  "radial-gradient(circle, rgba(107,46,82,0.28) 0%, transparent 70%)",
                 filter: "blur(18px)",
               }}
             />
             <div style={{ width: avatarW, height: avatarH }}>
-              <BrideAvatar />
+              <GroomAvatar />
             </div>
             <motion.p
               className="font-display italic font-light mt-3 relative"
@@ -438,23 +438,22 @@ export default function CoupleAnimation() {
               &amp;
             </div>
           </motion.div>
-
-          {/* Groom */}
+          {/* Bride */}
           <motion.div
             className="absolute bottom-0 flex flex-col items-center"
-            style={{ x: groomX, y: groomY }}
+            style={{ x: brideX, y: brideY }}
           >
             <motion.div
               className="absolute -inset-8 rounded-full pointer-events-none"
               style={{
                 opacity: avatarGlow,
                 background:
-                  "radial-gradient(circle, rgba(107,46,82,0.28) 0%, transparent 70%)",
+                  "radial-gradient(circle, rgba(168,100,136,0.3) 0%, transparent 70%)",
                 filter: "blur(18px)",
               }}
             />
             <div style={{ width: avatarW, height: avatarH }}>
-              <GroomAvatar />
+              <BrideAvatar />
             </div>
             <motion.p
               className="font-display italic font-light mt-3 relative"
