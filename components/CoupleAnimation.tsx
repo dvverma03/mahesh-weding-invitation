@@ -332,8 +332,8 @@ export default function CoupleAnimation() {
     restDelta: 0.001,
   });
 
-  const brideX = useTransform(smoothProgress, [0, 0.82], ["-46vw", "-7vw"]);
-  const groomX = useTransform(smoothProgress, [0, 0.82], ["46vw", "7vw"]);
+  const groomX = useTransform(smoothProgress, [0, 0.82], ["-46vw", "-7vw"]);
+  const brideX = useTransform(smoothProgress, [0, 0.82], ["46vw", "7vw"]);
   const brideY = useTransform(smoothProgress, [0.5, 0.85], ["0px", "-14px"]);
   const groomY = useTransform(smoothProgress, [0.5, 0.85], ["0px", "-14px"]);
   const avatarGlow = useTransform(smoothProgress, [0.5, 0.85], [0, 1]);
