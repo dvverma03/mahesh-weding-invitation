@@ -1,194 +1,177 @@
 "use client";
 
-import { motion } from "framer-motion";
-import GlassCard from "./GlassCard";
-import ParallaxLayer from "./ParallaxLayer";
+import { useRef } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { Marigold } from "./Flowers";
+import SectionDecor from "./SectionDecor";
+import { COUPLE, EVENTS as events, type WeddingEvent } from "@/lib/wedding";
 
-const PRATAP = "RZB – 141 Pratap Garden, Bindapur, Uttam Nagar, New Delhi";
-const CASA =
-  "CASA ROYAL BANQUET, Metro Pillar 610, 177A West, Before Block A1, Janakpuri, New Delhi 110058";
+function downloadIcs(e: WeddingEvent) {
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    `PRODID:-//${COUPLE}//Wedding//EN`,
+    "BEGIN:VEVENT",
+    `UID:${e.start}-${COUPLE.toLowerCase().replace(/[^a-z]+/g, "-")}@invite`,
+    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`,
+    `DTSTART;TZID=Asia/Kolkata:${e.start}`,
+    `DTEND;TZID=Asia/Kolkata:${e.end}`,
+    `SUMMARY:${e.title} — ${COUPLE}`,
+    `LOCATION:${e.venue.replace(/,/g, "\\,")}`,
+    `DESCRIPTION:${e.description.replace(/,/g, "\\,")}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+  const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${e.title.toLowerCase().replace(/[^a-z]+/g, "-")}.ics`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
-const events = [
-  {
-    title: "Tilak Ceremony",
-    date: "1 May 2026",
-    time: "Afternoon",
-    venue: "Paterha Maglpur, Post Dandopur, Kushinagar, Uttar Pradesh",
-    icon: "🪔",
-    description:
-      "The auspicious beginning marked by prayers and blessings, officially commencing the joyous wedding festivities.",
-  },
-  {
-    title: "Haldi & Mehndi",
-    date: "4 May 2026",
-    time: "Evening",
-    venue: "Paterha Maglpur, Post Dandopur, Kushinagar, Uttar Pradesh",
-    icon: "🌿",
-    description:
-      "A vibrant celebration of colors and tradition. Join us for the playful haldi rituals and beautiful mehndi artistry.",
-  },
-  {
-    title: "Wedding Ceremony",
-    date: "5 May 2026",
-    time: "8:00 PM onwards",
-    venue: "Paterha Maglpur, Post Dandopur, Kushinagar, Uttar Pradesh",
-    icon: "💍",
-    description:
-      "The beautiful union of two souls. An evening of sacred vows, traditional rituals, and unforgettable memories.",
-    featured: true,
-  },
-];
+function mapsUrl(venue: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`;
+}
 
-export default function EventTimeline() {
+function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
+  const featured = event.featured;
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
-      {/* Background parallax accent */}
-      <ParallaxLayer
-        speed={0.2}
-        className="absolute inset-0 pointer-events-none"
+    <div className="relative pl-14 sm:pl-0 sm:grid sm:grid-cols-[1fr_72px_1fr] sm:items-center">
+      {/* Date — opposite side of the card on wide screens */}
+      <motion.div
+        initial={{ opacity: 0, x: index % 2 ? 30 : -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className={`mb-3 sm:mb-0 flex items-baseline gap-3 sm:flex-col sm:items-center sm:gap-0 ${
+          index % 2 ? "sm:col-start-3 sm:row-start-1" : "sm:col-start-1 sm:row-start-1"
+        }`}
+      >
+        <span
+          className="font-display leading-none"
+          style={{ fontSize: "clamp(3rem, 9vw, 5.5rem)", color: featured ? "var(--marigold-light)" : "var(--ivory)" }}
+        >
+          {event.day}
+        </span>
+        <span className="font-body text-base sm:text-lg" style={{ color: "var(--ivory-muted)" }}>
+          {event.month} 2026, {event.weekday}
+        </span>
+      </motion.div>
+
+      {/* Node */}
+      <motion.div
+        className="absolute left-0 top-2 sm:static sm:col-start-2 sm:row-start-1 flex justify-center"
+        initial={{ scale: 0, rotate: -180 }}
+        whileInView={{ scale: 1, rotate: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ type: "spring", stiffness: 120, damping: 12 }}
       >
         <div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{
-            width: "120vw",
-            height: "120vw",
-            maxWidth: 900,
-            maxHeight: 900,
-            background:
-              "radial-gradient(circle, rgba(107,46,82,0.15) 0%, transparent 60%)",
-          }}
-        />
-      </ParallaxLayer>
+          className="rounded-full p-1"
+          style={{ background: "var(--ink)", boxShadow: "0 0 0 2px rgba(244,162,27,0.5), 0 0 24px rgba(244,162,27,0.45)" }}
+        >
+          <Marigold size={featured ? 46 : 38} />
+        </div>
+      </motion.div>
 
-      {/* Heading */}
-      <div className="flex flex-col items-center mb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="font-body text-xs uppercase tracking-[0.4em] mb-4"
-          style={{ color: "var(--gold)" }}
-        >
-          The Celebrations
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-display font-light italic text-center"
-          style={{
-            fontSize: "clamp(2rem, 5vw, 3.2rem)",
-            color: "var(--cream)",
-          }}
-        >
-          Three Days of Joy
-        </motion.h2>
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, delay: 0.2 }}
-          className="gold-divider w-32 mt-6"
-        />
+      {/* Card */}
+      <motion.article
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        className={`relative rounded-2xl p-6 sm:p-7 ${
+          index % 2 ? "sm:col-start-1 sm:row-start-1" : "sm:col-start-3 sm:row-start-1"
+        }`}
+        style={
+          featured
+            ? {
+                background: "linear-gradient(150deg, #c2185b 0%, #6a1b5e 100%)",
+                boxShadow: "0 24px 50px -18px rgba(216,27,96,0.6), inset 0 0 0 1px rgba(255,200,87,0.55)",
+              }
+            : {
+                background: "rgba(31,10,36,0.62)",
+                boxShadow: "inset 0 0 0 1px rgba(244,162,27,0.28)",
+                backdropFilter: "blur(6px)",
+              }
+        }
+      >
+        <p className="font-hindi text-lg" style={{ color: "var(--marigold-light)" }}>
+          {event.hindi}
+        </p>
+        <h3 className="font-display text-2xl sm:text-3xl mt-1" style={{ color: "var(--ivory)" }}>
+          {event.title}
+        </h3>
+        <p className="font-body text-base mt-1" style={{ color: "var(--marigold-light)" }}>
+          {event.time}
+        </p>
+        <p className="font-body font-light text-base leading-7 mt-4" style={{ color: "var(--ivory-muted)" }}>
+          {event.description}
+        </p>
+        <p className="font-body text-sm leading-6 mt-4" style={{ color: "var(--ivory)" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" className="inline mr-1.5 -mt-0.5" aria-hidden>
+            <path
+              fill="var(--marigold)"
+              d="M12 2C8 2 5 5 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-4-3-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"
+            />
+          </svg>
+          {event.venue}
+        </p>
+        <div className="flex flex-wrap gap-2.5 mt-5">
+          <button type="button" className="btn btn-solid" onClick={() => downloadIcs(event)}>
+            Add to calendar
+          </button>
+          <a className="btn btn-line" href={mapsUrl(event.venue)} target="_blank" rel="noreferrer">
+            Directions
+          </a>
+        </div>
+      </motion.article>
+    </div>
+  );
+}
+
+export default function EventTimeline() {
+  const listRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ["start 75%", "end 60%"],
+  });
+  const lineScale = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
+
+  return (
+    <section className="relative py-24 px-5">
+      <SectionDecor variant={1} />
+      <div className="relative flex flex-col items-center mb-16 text-center">
+        <p className="font-hindi text-lg" style={{ color: "var(--marigold-light)" }}>
+          मांगलिक कार्यक्रम
+        </p>
+        <h2 className="font-display mt-2" style={{ fontSize: "clamp(2.2rem, 6vw, 3.6rem)", color: "var(--ivory)" }}>
+          The celebrations
+        </h2>
+        <p className="font-body text-base mt-2 max-w-md" style={{ color: "var(--ivory-muted)" }}>
+          Three days of colour, music and everyone we love.
+        </p>
       </div>
 
-      {/* Cards grid */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-        {/* Connecting line on desktop */}
+      <div ref={listRef} className="relative max-w-4xl mx-auto flex flex-col gap-14 sm:gap-20">
+        {/* Garland thread that grows as you scroll */}
         <div
-          className="hidden md:block absolute top-16 left-[calc(16.66%+1.5rem)] right-[calc(16.66%+1.5rem)] h-px pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, var(--gold-dark) 20%, var(--gold) 50%, var(--gold-dark) 80%, transparent)",
-            opacity: 0.4,
-          }}
-        />
+          className="absolute top-0 bottom-0 left-[23px] sm:left-1/2 sm:-translate-x-1/2 w-0.5"
+          style={{ background: "rgba(244,162,27,0.15)" }}
+          aria-hidden
+        >
+          <motion.div
+            className="w-full h-full origin-top"
+            style={{
+              scaleY: lineScale,
+              background: "linear-gradient(180deg, var(--marigold-light), var(--marigold-deep), var(--sindoor))",
+            }}
+          />
+        </div>
 
         {events.map((event, i) => (
-          <GlassCard
-            key={event.title}
-            delay={i * 0.12}
-            glow={event.featured}
-            className={`relative flex flex-col p-8 text-center ${
-              event.featured ? "md:-translate-y-4 md:scale-[1.03]" : ""
-            }`}
-          >
-            {event.featured && (
-              <div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 glass-pill px-4 py-1"
-                style={{
-                  border: "1px solid rgba(201,168,76,0.4)",
-                }}
-              >
-                <span
-                  className="font-body text-[9px] uppercase tracking-[0.3em]"
-                  style={{ color: "var(--gold)" }}
-                >
-                  Main Event
-                </span>
-              </div>
-            )}
-
-            {/* Icon */}
-            <div className="text-4xl mb-5">{event.icon}</div>
-
-            {/* Title */}
-            <h3
-              className="font-display font-medium mb-2"
-              style={{
-                fontSize: "clamp(1.3rem, 3vw, 1.6rem)",
-                color: "var(--cream)",
-              }}
-            >
-              {event.title}
-            </h3>
-
-            {/* Divider */}
-            <div className="gold-divider w-16 mx-auto mb-4" />
-
-            {/* Date + Time */}
-            <p
-              className="font-body font-light text-sm mb-1"
-              style={{ color: "var(--gold)" }}
-            >
-              {event.date}
-            </p>
-            <p
-              className="font-body font-light text-xs tracking-wider mb-5"
-              style={{ color: "var(--cream-muted)" }}
-            >
-              {event.time}
-            </p>
-
-            {/* Description */}
-            <p
-              className="font-body font-light text-sm leading-6 mb-6 flex-1"
-              style={{ color: "var(--cream-muted)" }}
-            >
-              {event.description}
-            </p>
-
-            {/* Venue */}
-            <div
-              className="glass-sm px-4 py-3"
-              style={{ background: "rgba(201,168,76,0.04)" }}
-            >
-              <p
-                className="font-body text-[10px] uppercase tracking-[0.2em] mb-1"
-                style={{ color: "var(--gold)" }}
-              >
-                Venue
-              </p>
-              <p
-                className="font-body font-light text-xs leading-5"
-                style={{ color: "var(--cream-muted)" }}
-              >
-                {event.venue}
-              </p>
-            </div>
-          </GlassCard>
+          <EventCard key={event.title} event={event} index={i} />
         ))}
       </div>
     </section>

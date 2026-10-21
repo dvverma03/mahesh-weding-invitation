@@ -1,29 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --bg-deep: #120818;
-  --bg-mid: #261028;
-  --bg-light: #3d1838;
-  --sage: #6b2e52;
-  --sage-light: #a86488;
-  --gold: #c9a84c;
-  --gold-light: #e8c96a;
-  --gold-dark: #a07828;
-  --cream: #fdf0f4;
-  --cream-muted: rgba(253, 240, 244, 0.72);
-  --glass-bg: rgba(253, 240, 244, 0.058);
-  --glass-bg-hover: rgba(253, 240, 244, 0.09);
-  --glass-border: rgba(253, 240, 244, 0.15);
-  --glass-inner-top: rgba(253, 240, 244, 0.24);
-  --glass-inner-bottom: rgba(0, 0, 0, 0.1);
-  --glass-shadow: rgba(18, 8, 24, 0.5);
-  --font-display: var(--font-cormorant);
-  --font-body: var(--font-montserrat);
+  /* Shaadi night: aubergine dusk, rani pink silk, marigold and haldi gold */
+  --ink: #1f0a24;
+  --peacock: #3b0f3f;
+  --peacock-light: #6a1b5e;
+  --rani: #d81b60;
+  --parrot: #43a047;
+  --marigold: #f4a21b;
+  --marigold-light: #ffc857;
+  --marigold-deep: #d9730d;
+  --sindoor: #c21e3a;
+  --sindoor-deep: #8e1028;
+  --rose: #f28aa6;
+  --mehndi: #6e8b3d;
+  --ivory: #fff4e0;
+  --ivory-muted: rgba(255, 244, 224, 0.74);
+  --paper: #fff7e8;
+  --paper-ink: #4a1620;
+
+  --font-display: var(--font-rozha);
+  --font-hindi: var(--font-tiro);
+  --font-body: var(--font-mukta);
 }
 
 @theme inline {
-  --color-background: var(--bg-deep);
-  --color-foreground: var(--cream);
+  --color-background: var(--ink);
+  --color-foreground: var(--ivory);
 }
 
 *,
@@ -34,59 +37,23 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--ink);
 }
 
 body {
-  background: linear-gradient(160deg,
-    var(--bg-deep) 0%,
-    var(--bg-mid) 35%,
-    var(--bg-light) 65%,
-    var(--sage) 85%,
-    #8a4468 100%
-  );
-  background-attachment: fixed;
-  color: var(--cream);
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(216, 27, 96, 0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 100% 55%, rgba(216, 27, 96, 0.2) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 0% 80%, rgba(244, 162, 27, 0.14) 0%, transparent 70%),
+    linear-gradient(180deg, var(--ink) 0%, var(--peacock) 45%, var(--ink) 100%);
+  background-color: var(--ink);
+  color: var(--ivory);
   min-height: 100vh;
   overflow-x: hidden;
   font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* ─── Glass Morphism ─── */
-.glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(28px) saturate(200%) brightness(1.08);
-  -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.08);
-  border: 1px solid var(--glass-border);
-  box-shadow:
-    0 16px 48px var(--glass-shadow),
-    0 4px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1.5px 0 var(--glass-inner-top),
-    inset 0 -1px 0 var(--glass-inner-bottom);
-  border-radius: 24px;
-}
-
-.glass-sm {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  box-shadow:
-    0 8px 24px var(--glass-shadow),
-    inset 0 1px 0 var(--glass-inner-top);
-  border-radius: 16px;
-}
-
-.glass-pill {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  box-shadow:
-    0 4px 16px var(--glass-shadow),
-    inset 0 1px 0 var(--glass-inner-top);
-  border-radius: 9999px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ─── Typography ─── */
@@ -94,85 +61,136 @@ body {
   font-family: var(--font-display), Georgia, serif;
 }
 
+.font-hindi {
+  font-family: var(--font-hindi), Georgia, serif;
+}
+
 .font-body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-.gold-text {
+.marigold-text {
   background: linear-gradient(
-    135deg,
-    var(--gold-dark) 0%,
-    var(--gold) 30%,
-    var(--gold-light) 50%,
-    var(--gold) 70%,
-    var(--gold-dark) 100%
+    100deg,
+    var(--marigold-deep) 0%,
+    var(--marigold) 25%,
+    var(--marigold-light) 50%,
+    var(--marigold) 75%,
+    var(--marigold-deep) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 4s linear infinite;
+  animation: shimmer 6s linear infinite;
 }
 
-.gold-divider {
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--gold-dark) 20%,
-    var(--gold) 50%,
-    var(--gold-dark) 80%,
-    transparent 100%
+/* Burnished gold foil that reads on ivory paper */
+.gold-foil {
+  background: linear-gradient(
+    100deg,
+    #b8801f 0%,
+    #e0a92e 25%,
+    #f6d77c 45%,
+    #d29a2a 65%,
+    #a8701a 85%,
+    #b8801f 100%
   );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 1px 0 rgba(90, 11, 34, 0.35));
+  animation: shimmer 7s linear infinite;
 }
 
-/* ─── Keyframe Animations ─── */
-@keyframes float-petal {
-  0% {
-    transform: translateY(108vh) rotate(0deg) translateX(0px);
-    opacity: 0;
-  }
-  8% { opacity: 1; }
-  85% { opacity: 0.5; }
-  100% {
-    transform: translateY(-15vh) rotate(540deg) translateX(60px);
-    opacity: 0;
-  }
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s, border-color 0.2s;
+  cursor: pointer;
 }
 
-@keyframes float-bokeh {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0;
-  }
-  15% { opacity: 0.6; }
-  85% { opacity: 0.2; }
-  100% {
-    transform: translateY(-90vh) scale(0.4);
-    opacity: 0;
-  }
+.btn:active {
+  transform: scale(0.96);
 }
 
+.btn:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--marigold-light);
+  outline-offset: 3px;
+}
+
+.btn-solid {
+  background: var(--marigold);
+  color: var(--ink);
+}
+
+.btn-solid:hover {
+  background: var(--marigold-light);
+}
+
+.btn-line {
+  border: 1px solid rgba(244, 162, 27, 0.55);
+  color: var(--marigold-light);
+}
+
+.btn-line:hover {
+  background: rgba(244, 162, 27, 0.12);
+  border-color: var(--marigold);
+}
+
+/* ─── Paper card (the letter) ─── */
+.paper {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(244, 162, 27, 0.08), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(194, 30, 58, 0.07), transparent 45%),
+    var(--paper);
+  color: var(--paper-ink);
+  border-radius: 6px;
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.55),
+    0 0 0 6px var(--rani),
+    0 0 0 8px var(--marigold),
+    0 0 0 9px rgba(255, 244, 224, 0.4);
+}
+
+/* ─── Jaali: a small gold-and-rani motif tiled behind everything ─── */
+.jaali {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23ffca28' stroke-width='1'%3E%3Cpath d='M36 6 L44 28 L66 36 L44 44 L36 66 L28 44 L6 36 L28 28 Z'/%3E%3Ccircle cx='36' cy='36' r='6'/%3E%3C/g%3E%3Cg fill='%23d81b60'%3E%3Ccircle cx='36' cy='36' r='2.5'/%3E%3Ccircle cx='0' cy='0' r='3'/%3E%3Ccircle cx='72' cy='0' r='3'/%3E%3Ccircle cx='0' cy='72' r='3'/%3E%3Ccircle cx='72' cy='72' r='3'/%3E%3C/g%3E%3Cg fill='%23ffca28'%3E%3Ccircle cx='36' cy='0' r='1.5'/%3E%3Ccircle cx='0' cy='36' r='1.5'/%3E%3Ccircle cx='72' cy='36' r='1.5'/%3E%3Ccircle cx='36' cy='72' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 72px 72px;
+}
+
+/* ─── Keyframes ─── */
 @keyframes shimmer {
   0% { background-position: 200% center; }
   100% { background-position: -200% center; }
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow:
-      0 16px 48px var(--glass-shadow),
-      0 0 0 0 rgba(201, 168, 76, 0);
-  }
-  50% {
-    box-shadow:
-      0 16px 48px var(--glass-shadow),
-      0 0 32px 4px rgba(201, 168, 76, 0.15);
-  }
+@keyframes fall {
+  0% { transform: translate3d(0, -12vh, 0); opacity: 0; }
+  8% { opacity: 1; }
+  90% { opacity: 0.9; }
+  100% { transform: translate3d(0, 112vh, 0); opacity: 0; }
 }
 
-@keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50% { transform: translateY(8px); opacity: 0.5; }
+@keyframes sway {
+  0%, 100% { transform: translateX(-22px) rotate(-25deg); }
+  50% { transform: translateX(22px) rotate(35deg); }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-2.2deg); }
+  50% { transform: rotate(2.2deg); }
 }
 
 @keyframes spin-slow {
@@ -180,14 +198,65 @@ body {
   to { transform: rotate(360deg); }
 }
 
+@keyframes flicker {
+  0%, 100% { transform: scale(1) translateY(0); opacity: 1; }
+  25% { transform: scale(1.08, 0.94) translateY(0.5px); opacity: 0.9; }
+  50% { transform: scale(0.95, 1.08) translateY(-0.5px); opacity: 1; }
+  75% { transform: scale(1.04, 0.97); opacity: 0.85; }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-bob {
+  animation: bob 5s ease-in-out infinite;
+}
+
+.animate-spin-rev {
+  animation: spin-slow 120s linear infinite reverse;
+}
+
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(8px); opacity: 0.4; }
+}
+
+.animate-swing {
+  animation: swing 5s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 90s linear infinite;
+}
+
+.animate-flicker {
+  animation: flicker 1.6s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 /* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-deep);
+  background: var(--ink);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--gold-dark);
+  background: var(--marigold-deep);
   border-radius: 2px;
 }

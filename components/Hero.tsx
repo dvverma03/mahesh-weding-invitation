@@ -2,223 +2,260 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import FloatingPetals from "./FloatingPetals";
-
-const BRIDE = "Mahesh";
-const GROOM = "Shilpa";
+import { Diya, GarlandStrand, Lotus, Mandala, Paisley, Rangoli } from "./Flowers";
+import { BRIDE, CITY, DATE_RANGE, GROOM } from "@/lib/wedding";
+const STRANDS = 15;
 
 function SplitText({
   text,
   delay = 0,
-  className = "",
+  play,
 }: {
   text: string;
   delay?: number;
-  className?: string;
+  play: boolean;
 }) {
   return (
-    <span className={`inline-flex ${className}`}>
+    <span className="inline-flex" aria-label={text}>
       {text.split("").map((char, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, y: 48, rotateX: -40 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          aria-hidden
+          initial={{ opacity: 0, y: 60, rotate: -8, filter: "blur(8px)" }}
+          animate={play ? { opacity: 1, y: 0, rotate: 0, filter: "blur(0px)" } : undefined}
           transition={{
-            duration: 0.7,
-            delay: delay + i * 0.055,
-            ease: [0.25, 0.46, 0.45, 0.94],
+            duration: 0.9,
+            delay: delay + i * 0.07,
+            ease: [0.22, 1, 0.36, 1],
           }}
           className="inline-block"
-          style={{ transformOrigin: "bottom center" }}
         >
-          {char === " " ? "\u00A0" : char}
+          {char}
         </motion.span>
       ))}
     </span>
   );
 }
 
-export default function Hero() {
+export default function Hero({ ready }: { ready: boolean }) {
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const mandalaY = useTransform(scrollYProgress, [0, 1], ["0%", "35%"]);
+  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 18 },
+    animate: ready ? { opacity: 1, y: 0 } : undefined,
+    transition: { duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] as const },
+  });
 
   return (
     <section
       ref={heroRef}
       className="relative w-full overflow-hidden"
-      style={{ height: "100svh", minHeight: 560 }}
+      style={{ height: "100svh", minHeight: 620 }}
     >
-      {/* Parallax background layer */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
-        {/* Radial glow */}
+      {/* Hanging toran */}
+      <div className="absolute top-0 inset-x-0 z-20 pointer-events-none">
         <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(107, 46, 82, 0.45) 0%, transparent 70%)",
-          }}
+          className="h-2.5 w-full"
+          style={{ background: "linear-gradient(180deg, #6e8b3d, #4d6a24)" }}
         />
-        {/* Top vignette */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(18,8,24,0.75) 0%, transparent 40%, transparent 60%, rgba(18,8,24,0.55) 100%)",
-          }}
-        />
-      </motion.div>
-
-      {/* Floating petals */}
-      <div className="absolute inset-0 z-0">
-        <FloatingPetals count={32} />
+        <div className="flex justify-between px-1">
+          {Array.from({ length: STRANDS }, (_, i) => {
+            const fromEdge = Math.min(i, STRANDS - 1 - i);
+            return (
+              <motion.div
+                key={i}
+                initial={{ y: -200 }}
+                animate={ready ? { y: 0 } : undefined}
+                transition={{
+                  type: "spring",
+                  stiffness: 70,
+                  damping: 9,
+                  delay: 0.3 + fromEdge * 0.06,
+                }}
+              >
+                <div
+                  className="animate-swing"
+                  style={{ animationDelay: `${-i * 0.41}s` }}
+                >
+                  <GarlandStrand beads={i % 2 === 0 ? 4 : 2} size={16} />
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Decorative ring */}
+      {/* Mandala */}
+      <div className="absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
+      <motion.div style={{ y: mandalaY, rotate: mandalaRotate }}>
+        <motion.div
+          initial={{ scale: 0.4, opacity: 0 }}
+          animate={ready ? { scale: 1, opacity: 1 } : undefined}
+          transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          style={{ color: "rgba(255,202,40,0.26)" }}
+        >
+          <Mandala
+            className="animate-spin-slow"
+            style={{ width: "min(720px, 130vw)", height: "min(720px, 130vw)" }}
+          />
+        </motion.div>
+      </motion.div>
+      </div>
+
+      {/* Rangolis rising from the lower corners */}
       <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none"
-        initial={{ scale: 0.6, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1.6, ease: "easeOut", delay: 0.2 }}
+        aria-hidden
+        className="absolute -bottom-24 -left-24 sm:-bottom-32 sm:-left-28 z-0 pointer-events-none opacity-70"
+        initial={{ scale: 0, rotate: -90 }}
+        animate={ready ? { scale: 1, rotate: 0 } : undefined}
+        transition={{ duration: 1.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div
-          className="rounded-full"
-          style={{
-            width: "min(560px, 80vw)",
-            height: "min(560px, 80vw)",
-            border: "1px solid rgba(201,168,76,0.12)",
-            boxShadow:
-              "inset 0 0 80px rgba(201,168,76,0.06), 0 0 80px rgba(201,168,76,0.04)",
-          }}
-        />
+        <Rangoli variant={0} className="animate-spin-slow" style={{ width: "min(56vw, 380px)", height: "min(56vw, 380px)" }} />
       </motion.div>
       <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none"
-        initial={{ scale: 0.7, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 2, ease: "easeOut", delay: 0.4 }}
+        aria-hidden
+        className="absolute -bottom-24 -right-24 sm:-bottom-32 sm:-right-28 z-0 pointer-events-none opacity-70"
+        initial={{ scale: 0, rotate: 90 }}
+        animate={ready ? { scale: 1, rotate: 0 } : undefined}
+        transition={{ duration: 1.6, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div
-          className="rounded-full"
-          style={{
-            width: "min(680px, 96vw)",
-            height: "min(680px, 96vw)",
-            border: "1px solid rgba(201,168,76,0.07)",
-          }}
-        />
+        <Rangoli variant={2} className="animate-spin-rev" style={{ width: "min(56vw, 380px)", height: "min(56vw, 380px)" }} />
       </motion.div>
 
-      {/* Main content */}
+      {/* Paisleys and lotuses flanking the names */}
       <motion.div
-        className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6"
+        aria-hidden
+        className="absolute left-[4%] sm:left-[12%] top-1/2 -translate-y-1/2 z-0 hidden sm:flex flex-col items-center gap-3 pointer-events-none"
+        initial={{ opacity: 0, x: -40 }}
+        animate={ready ? { opacity: 0.9, x: 0 } : undefined}
+        transition={{ duration: 1.2, delay: 1.2 }}
+      >
+        <Paisley size={46} color="#ffca28" />
+        <Lotus size={70} />
+        <Paisley size={46} color="#f48fb1" style={{ transform: "scaleX(-1)" }} />
+      </motion.div>
+      <motion.div
+        aria-hidden
+        className="absolute right-[4%] sm:right-[12%] top-1/2 -translate-y-1/2 z-0 hidden sm:flex flex-col items-center gap-3 pointer-events-none"
+        initial={{ opacity: 0, x: 40 }}
+        animate={ready ? { opacity: 0.9, x: 0 } : undefined}
+        transition={{ duration: 1.2, delay: 1.2 }}
+      >
+        <Paisley size={46} color="#ffca28" style={{ transform: "scaleX(-1)" }} />
+        <Lotus size={70} />
+        <Paisley size={46} color="#f48fb1" />
+      </motion.div>
+
+      {/* Warm glow behind the names */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 52%, rgba(31,10,36,0.75) 0%, rgba(31,10,36,0.4) 28%, rgba(216,27,96,0.12) 42%, transparent 60%)",
+        }}
+      />
+
+      <motion.div
+        className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 pt-20"
         style={{ y: contentY, opacity }}
       >
-        {/* Eyebrow */}
         <motion.div
-          initial={{ opacity: 0, letterSpacing: "0.3em" }}
-          animate={{ opacity: 1, letterSpacing: "0.5em" }}
-          transition={{ duration: 1.2, delay: 0.1 }}
-          className="font-body text-xs uppercase mb-6"
-          style={{ color: "var(--gold)", letterSpacing: "0.5em" }}
+          {...fadeUp(0.4)}
+          className="relative overflow-hidden mb-3"
+          style={{
+            width: "clamp(78px, 20vw, 118px)",
+            aspectRatio: "0.86",
+            borderRadius: "999px 999px 12px 12px",
+            border: "2px solid #ffc857",
+            boxShadow: "0 0 0 3px #7a0e3a, 0 0 0 5px #ffc857, 0 0 36px rgba(255,200,87,0.45)",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/img/ganesh-gold.webp" alt="Shri Ganesh" className="absolute inset-0 w-full h-full object-cover" />
+        </motion.div>
+        <motion.p
+          {...fadeUp(0.6)}
+          className="font-hindi text-base sm:text-lg mb-2"
+          style={{ color: "var(--marigold-light)" }}
+        >
+          ॥ श्री गणेशाय नमः ॥
+        </motion.p>
+        <motion.p
+          {...fadeUp(0.8)}
+          className="font-body font-light text-base sm:text-lg mb-6"
+          style={{ color: "var(--ivory-muted)" }}
         >
           Together with their families
-        </motion.div>
-
-        {/* Gold divider top */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.3 }}
-          className="gold-divider w-40 mb-8"
-        />
-
-        {/* Bride name */}
-        <div
-          className="font-display font-light leading-none mb-0"
-          style={{
-            fontSize: "clamp(3.2rem, 10vw, 8rem)",
-            color: "var(--cream)",
-          }}
-        >
-          <SplitText text={BRIDE} delay={0.5} />
-        </div>
-
-        {/* Ampersand */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 1.0, ease: "backOut" }}
-          className="font-display italic gold-text my-2"
-          style={{ fontSize: "clamp(2rem, 6vw, 4.5rem)" }}
-        >
-          &amp;
-        </motion.div>
-
-        {/* Groom name */}
-        <div
-          className="font-display font-light leading-none mb-8"
-          style={{
-            fontSize: "clamp(3.2rem, 10vw, 8rem)",
-            color: "var(--cream)",
-          }}
-        >
-          <SplitText text={GROOM} delay={0.9} />
-        </div>
-
-        {/* Gold divider bottom */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 0.9, delay: 1.4 }}
-          className="gold-divider w-40 mb-6"
-        />
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="font-body font-light uppercase tracking-[0.35em] text-sm mb-2"
-          style={{ color: "var(--cream-muted)" }}
-        >
-          Wedding Invitation
         </motion.p>
 
-        {/* Dates */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.7 }}
-          className="font-body font-light text-xs tracking-[0.22em] uppercase"
-          style={{ color: "var(--gold)" }}
+        <h1
+          className="font-display leading-[0.95]"
+          style={{ fontSize: "clamp(3.6rem, 13vw, 9rem)", color: "var(--ivory)" }}
         >
-          4 May&nbsp;&nbsp;·&nbsp;&nbsp;5 May&nbsp;&nbsp;·&nbsp;&nbsp;7 May
-          2026&nbsp;&nbsp;·&nbsp;&nbsp;Kushinagar, Uttar Pradesh
+          <SplitText text={BRIDE} delay={1.0} play={ready} />
+          <motion.span
+            className="block font-hindi italic marigold-text my-1"
+            style={{ fontSize: "0.5em", lineHeight: 1.2 }}
+            initial={{ opacity: 0, scale: 0.3, rotate: -30 }}
+            animate={ready ? { opacity: 1, scale: 1, rotate: 0 } : undefined}
+            transition={{ duration: 1, delay: 1.5, ease: "backOut" }}
+          >
+            &amp;
+          </motion.span>
+          <SplitText text={GROOM} delay={1.7} play={ready} />
+        </h1>
+
+        <motion.p
+          {...fadeUp(2.3)}
+          className="font-hindi italic text-lg sm:text-xl mt-6"
+          style={{ color: "var(--ivory)" }}
+        >
+          request the pleasure of your company
         </motion.p>
+
+        <motion.div {...fadeUp(2.5)} className="flex items-center gap-3 sm:gap-4 mt-6">
+          <Diya size={36} />
+          <div className="flex flex-col items-center">
+            <span
+              className="font-display text-xl sm:text-3xl whitespace-nowrap"
+              style={{ color: "var(--marigold-light)" }}
+            >
+              {DATE_RANGE}
+            </span>
+            <span
+              className="font-body text-sm sm:text-base"
+              style={{ color: "var(--ivory-muted)" }}
+            >
+              {CITY}
+            </span>
+          </div>
+          <Diya size={36} />
+        </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll hint */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.4, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-        style={{ color: "var(--cream-muted)" }}
+        animate={ready ? { opacity: 1 } : undefined}
+        transition={{ delay: 3.2, duration: 0.8 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        style={{ color: "var(--ivory-muted)" }}
       >
-        <span className="font-body text-[10px] tracking-[0.3em] uppercase">
-          Scroll
-        </span>
+        <span className="font-body text-sm">Scroll down</span>
         <div
-          className="w-px h-10 origin-top"
+          className="w-px h-10"
           style={{
-            background: "linear-gradient(180deg, var(--gold), transparent)",
-            animation: "scroll-bounce 2s ease-in-out infinite",
+            background: "linear-gradient(180deg, var(--marigold), transparent)",
+            animation: "scroll-hint 2s ease-in-out infinite",
           }}
         />
       </motion.div>

@@ -1,26 +1,37 @@
-import type { Metadata } from "next";
-import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Mukta, Rozha_One, Tiro_Devanagari_Hindi } from "next/font/google";
 import "./globals.css";
+import { BRIDE, CITY, COUPLE, DATE_RANGE, GROOM } from "@/lib/wedding";
 
-const cormorant = Cormorant_Garamond({
+const rozha = Rozha_One({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  weight: "400",
+  variable: "--font-rozha",
   display: "swap",
 });
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
+const tiro = Tiro_Devanagari_Hindi({
+  subsets: ["latin", "devanagari"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-tiro",
+  display: "swap",
+});
+
+const mukta = Mukta({
+  subsets: ["latin", "devanagari"],
   weight: ["300", "400", "500", "600"],
-  variable: "--font-montserrat",
+  variable: "--font-mukta",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Mahesh & Shilpa — Wedding Invitation",
-  description:
-    "Join us to celebrate the wedding of Mahesh and Shilpa across three joyful events in New Delhi.",
+  title: `${COUPLE} — Wedding Invitation`,
+  description: `Join us to celebrate the wedding of ${BRIDE} and ${GROOM}, ${DATE_RANGE} in ${CITY}.`,
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1f0a24",
 };
 
 export default function RootLayout({
@@ -29,7 +40,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${montserrat.variable}`}>
+    <html
+      lang="en"
+      className={`${rozha.variable} ${tiro.variable} ${mukta.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

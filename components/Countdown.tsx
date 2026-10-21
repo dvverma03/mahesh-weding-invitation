@@ -1,59 +1,58 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { Diya } from "./Flowers";
+import SectionDecor from "./SectionDecor";
+import { CITY, WEDDING_DATE, WEDDING_WHEN } from "@/lib/wedding";
 
-const WEDDING_DATE = new Date("2026-05-05T20:00:00");
-
-interface TimeLeft {
+interface Span {
   days: number;
   hours: number;
   minutes: number;
   seconds: number;
+  past: boolean;
 }
 
-function getTimeLeft(): TimeLeft {
+function getSpan(): Span {
   const diff = WEDDING_DATE.getTime() - Date.now();
-  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  const abs = Math.abs(diff);
   return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / (1000 * 60)) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
+    days: Math.floor(abs / 86_400_000),
+    hours: Math.floor((abs / 3_600_000) % 24),
+    minutes: Math.floor((abs / 60_000) % 60),
+    seconds: Math.floor((abs / 1000) % 60),
+    past: diff <= 0,
   };
 }
 
-function CountUnit({ value, label }: { value: number; label: string }) {
+function Unit({ value, label }: { value: number; label: string }) {
   const display = String(value).padStart(2, "0");
   return (
-    <div className="flex flex-col items-center gap-2 px-2">
+    <div className="flex flex-col items-center w-[4.5rem] sm:w-28">
       <div
-        className="glass-pill w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center relative overflow-hidden"
-        style={{ animation: "pulse-glow 4s ease-in-out infinite" }}
+        className="relative h-16 sm:h-24 w-full overflow-hidden rounded-xl flex items-center justify-center"
+        style={{
+          background: "linear-gradient(180deg, rgba(106,27,94,0.45), rgba(31,10,36,0.75))",
+          boxShadow: "inset 0 0 0 1px rgba(244,162,27,0.3)",
+        }}
       >
-        {/* Inner shimmer */}
-        <div
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(201,168,76,0.1) 0%, transparent 60%)",
-          }}
-        />
-        <span
-          className="font-display font-light relative z-10"
-          style={{
-            fontSize: "clamp(1.8rem, 5vw, 2.4rem)",
-            color: "var(--cream)",
-            lineHeight: 1,
-          }}
-        >
-          {display}
-        </span>
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={display}
+            initial={{ y: "-100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "100%", opacity: 0 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display tabular-nums"
+            style={{ fontSize: "clamp(2rem, 7vw, 3.4rem)", color: "var(--ivory)" }}
+          >
+            {display}
+          </motion.span>
+        </AnimatePresence>
+        <div className="absolute inset-x-0 top-1/2 h-px" style={{ background: "rgba(31,10,36,0.6)" }} />
       </div>
-      <span
-        className="font-body text-[10px] uppercase tracking-[0.3em]"
-        style={{ color: "var(--gold)" }}
-      >
+      <span className="font-body text-sm mt-2" style={{ color: "var(--marigold-light)" }}>
         {label}
       </span>
     </div>
@@ -61,95 +60,43 @@ function CountUnit({ value, label }: { value: number; label: string }) {
 }
 
 export default function Countdown() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
+  const [span, setSpan] = useState<Span | null>(null);
 
   useEffect(() => {
-    setTimeLeft(getTimeLeft());
-    const id = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
+    setSpan(getSpan());
+    const id = setInterval(() => setSpan(getSpan()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const isPast = WEDDING_DATE.getTime() <= Date.now();
+  const past = span?.past ?? false;
 
   return (
-    <section className="relative py-24 px-6 flex flex-col items-center overflow-hidden">
-      {/* Background glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(107,46,82,0.22) 0%, transparent 70%)",
-        }}
-      />
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="font-body text-xs uppercase tracking-[0.4em] mb-4"
-        style={{ color: "var(--gold)" }}
+    <section className="relative py-24 px-5 flex flex-col items-center text-center">
+      <SectionDecor flip variant={2} />
+      <div className="relative flex items-end gap-4">
+        <Diya size={40} />
+        <Diya size={56} />
+        <Diya size={40} />
+      </div>
+      <h2
+        className="relative font-display mt-4"
+        style={{ fontSize: "clamp(2rem, 6vw, 3.4rem)", color: "var(--ivory)" }}
       >
-        {isPast ? "It Happened" : "Counting Down"}
-      </motion.div>
+        {past ? "Happily married for" : "Counting down to the vows"}
+      </h2>
+      <p className="relative font-body text-base mt-2 mb-10" style={{ color: "var(--ivory-muted)" }}>
+        {past
+          ? `Since ${WEDDING_WHEN}, ${CITY}`
+          : `${WEDDING_WHEN}, ${CITY}`}
+      </p>
 
-      <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7, delay: 0.1 }}
-        className="font-display font-light italic text-center mb-3"
-        style={{
-          fontSize: "clamp(2rem, 5vw, 3.2rem)",
-          color: "var(--cream)",
-        }}
-      >
-        {isPast ? "The Wedding Happened" : "The Big Day Approaches"}
-      </motion.h2>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="font-body text-sm mb-12 text-center"
-        style={{ color: "var(--cream-muted)" }}
-      >
-        5 May 2026 · 8:00 PM · Paterha Maglpur, Post Dandopur, District
-        Kushinagar, Uttar Pradesh
-      </motion.p>
-
-      {timeLeft !== null && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex items-center gap-1 sm:gap-3 flex-wrap justify-center"
-        >
-          <CountUnit value={timeLeft.days} label="Days" />
-          <span
-            className="font-display text-3xl font-light mb-6"
-            style={{ color: "var(--gold-dark)" }}
-          >
-            :
-          </span>
-          <CountUnit value={timeLeft.hours} label="Hours" />
-          <span
-            className="font-display text-3xl font-light mb-6"
-            style={{ color: "var(--gold-dark)" }}
-          >
-            :
-          </span>
-          <CountUnit value={timeLeft.minutes} label="Minutes" />
-          <span
-            className="font-display text-3xl font-light mb-6"
-            style={{ color: "var(--gold-dark)" }}
-          >
-            :
-          </span>
-          <CountUnit value={timeLeft.seconds} label="Seconds" />
-        </motion.div>
+      {span && (
+        <div className="relative flex gap-2 sm:gap-4 justify-center">
+          <Unit value={span.days} label="days" />
+          <Unit value={span.hours} label="hours" />
+          <Unit value={span.minutes} label="minutes" />
+          <Unit value={span.seconds} label="seconds" />
+        </div>
       )}
     </section>
   );
