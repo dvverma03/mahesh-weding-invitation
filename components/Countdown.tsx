@@ -82,20 +82,20 @@ export default function Countdown() {
         className="relative font-display mt-4"
         style={{ fontSize: "clamp(2rem, 6vw, 3.4rem)", color: "var(--ivory)" }}
       >
-        {past ? "Happily married for" : "Counting down to the vows"}
+        {past ? "सुखद वैवाहिक जीवन के" : "शुभ घड़ी की प्रतीक्षा"}
       </h2>
       <p className="relative font-body text-base mt-2 mb-10" style={{ color: "var(--ivory-muted)" }}>
         {past
-          ? `Since ${WEDDING_WHEN}, ${CITY}`
+          ? `${WEDDING_WHEN} से, ${CITY}`
           : `${WEDDING_WHEN}, ${CITY}`}
       </p>
 
       {span && (
         <div className="relative flex gap-2 sm:gap-4 justify-center">
-          <Unit value={span.days} label="days" />
-          <Unit value={span.hours} label="hours" />
-          <Unit value={span.minutes} label="minutes" />
-          <Unit value={span.seconds} label="seconds" />
+          <Unit value={span.days} label="दिन" />
+          <Unit value={span.hours} label="घंटे" />
+          <Unit value={span.minutes} label="मिनट" />
+          <Unit value={span.seconds} label="सेकंड" />
         </div>
       )}
     </section>

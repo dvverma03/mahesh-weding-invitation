@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Mukta, Rozha_One, Tiro_Devanagari_Hindi } from "next/font/google";
 import "./globals.css";
-import { BRIDE, CITY, COUPLE, DATE_RANGE, GROOM } from "@/lib/wedding";
+import { BRIDE, CITY, DATE_RANGE, GROOM } from "@/lib/wedding";
 
 const rozha = Rozha_One({
-  subsets: ["latin"],
+  subsets: ["latin", "devanagari"],
   weight: "400",
   variable: "--font-rozha",
   display: "swap",
@@ -26,8 +26,8 @@ const mukta = Mukta({
 });
 
 export const metadata: Metadata = {
-  title: `${COUPLE} — Wedding Invitation`,
-  description: `Join us to celebrate the wedding of ${BRIDE} and ${GROOM}, ${DATE_RANGE} in ${CITY}.`,
+  title: `${BRIDE} संग ${GROOM} — शुभ विवाह निमंत्रण`,
+  description: `${BRIDE} एवं ${GROOM} के शुभ विवाह में आप सादर आमंत्रित हैं — ${DATE_RANGE}, ${CITY}।`,
 };
 
 export const viewport: Viewport = {
@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="hi"
       className={`${rozha.variable} ${tiro.variable} ${mukta.variable}`}
     >
       <body>{children}</body>

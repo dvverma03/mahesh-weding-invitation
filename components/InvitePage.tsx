@@ -5,6 +5,7 @@ import { MotionConfig, motion, useScroll, useSpring } from "framer-motion";
 import GateIntro from "./GateIntro";
 import Hero from "./Hero";
 import PersonalMessage from "./PersonalMessage";
+import FamilyDetails from "./FamilyDetails";
 import CoupleAnimation from "./CoupleAnimation";
 import Countdown from "./Countdown";
 import EventTimeline from "./EventTimeline";
@@ -43,36 +44,6 @@ function SectionDivider({ variant = 0 }: { variant?: number }) {
         <Rangoli size={72} variant={variant} />
       </motion.div>
     </div>
-  );
-}
-
-function ShareButton() {
-  const [copied, setCopied] = useState(false);
-
-  const share = async () => {
-    const url = window.location.href;
-    const data = {
-      title: `${COUPLE} — Wedding Invitation`,
-      text: `You're invited to the wedding of ${COUPLE}`,
-      url,
-    };
-    try {
-      if (navigator.share) {
-        await navigator.share(data);
-        return;
-      }
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
-    } catch {
-      /* share sheet dismissed */
-    }
-  };
-
-  return (
-    <button type="button" className="btn btn-solid" onClick={share}>
-      {copied ? "Link copied" : "Share invitation"}
-    </button>
   );
 }
 
@@ -120,9 +91,12 @@ export default function InvitePage({ name, withFamily }: InvitePageProps) {
           <EventTimeline />
 
           <SectionDivider variant={0} />
-          <Countdown />
+          <FamilyDetails />
 
           <SectionDivider variant={1} />
+          <Countdown />
+
+          <SectionDivider variant={2} />
 
           <footer className="relative pt-4 pb-20 px-6 flex flex-col items-center text-center overflow-hidden">
             <div
@@ -146,21 +120,15 @@ export default function InvitePage({ name, withFamily }: InvitePageProps) {
             <p className="relative font-hindi text-lg" style={{ color: "var(--marigold-light)" }}>
               आपके आगमन की प्रतीक्षा में
             </p>
-            <p className="relative font-body text-base mt-1" style={{ color: "var(--ivory-muted)" }}>
-              Awaiting your gracious presence
-            </p>
             <p
               className="relative font-display marigold-text mt-4"
               style={{ fontSize: "clamp(2.2rem, 7vw, 3.6rem)" }}
             >
               {COUPLE}
             </p>
-            <p className="relative font-body text-base mt-1 mb-8" style={{ color: "var(--ivory-muted)" }}>
+            <p className="relative font-body text-base mt-1" style={{ color: "var(--ivory-muted)" }}>
               {CITY}, {MONTH_YEAR}
             </p>
-            <div className="relative">
-              <ShareButton />
-            </div>
           </footer>
         </div>
       </main>

@@ -10,22 +10,22 @@ function downloadIcs(e: WeddingEvent) {
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    `PRODID:-//${COUPLE}//Wedding//EN`,
+    "PRODID:-//shubh-vivah//invite//HI",
     "BEGIN:VEVENT",
-    `UID:${e.start}-${COUPLE.toLowerCase().replace(/[^a-z]+/g, "-")}@invite`,
+    `UID:${e.start}-${e.slug}@invite`,
     `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`,
     `DTSTART;TZID=Asia/Kolkata:${e.start}`,
     `DTEND;TZID=Asia/Kolkata:${e.end}`,
     `SUMMARY:${e.title} — ${COUPLE}`,
-    `LOCATION:${e.venue.replace(/,/g, "\\,")}`,
+    ...(e.venue ? [`LOCATION:${e.venue.replace(/,/g, "\\,")}`] : []),
     `DESCRIPTION:${e.description.replace(/,/g, "\\,")}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ].join("\r\n");
-  const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${e.title.toLowerCase().replace(/[^a-z]+/g, "-")}.ics`;
+  a.download = `${e.slug}.ics`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
@@ -97,18 +97,18 @@ function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
               }
         }
       >
-        <p className="font-hindi text-lg" style={{ color: "var(--marigold-light)" }}>
-          {event.hindi}
-        </p>
-        <h3 className="font-display text-2xl sm:text-3xl mt-1" style={{ color: "var(--ivory)" }}>
+        <h3 className="font-display text-2xl sm:text-3xl" style={{ color: "var(--ivory)" }}>
           {event.title}
         </h3>
-        <p className="font-body text-base mt-1" style={{ color: "var(--marigold-light)" }}>
-          {event.time}
-        </p>
+        {event.time && (
+          <p className="font-body text-base mt-1" style={{ color: "var(--marigold-light)" }}>
+            {event.time}
+          </p>
+        )}
         <p className="font-body font-light text-base leading-7 mt-4" style={{ color: "var(--ivory-muted)" }}>
           {event.description}
         </p>
+        {event.venue && (
         <p className="font-body text-sm leading-6 mt-4" style={{ color: "var(--ivory)" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" className="inline mr-1.5 -mt-0.5" aria-hidden>
             <path
@@ -118,13 +118,16 @@ function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
           </svg>
           {event.venue}
         </p>
+        )}
         <div className="flex flex-wrap gap-2.5 mt-5">
           <button type="button" className="btn btn-solid" onClick={() => downloadIcs(event)}>
-            Add to calendar
+            कैलेंडर में जोड़ें
           </button>
-          <a className="btn btn-line" href={mapsUrl(event.venue)} target="_blank" rel="noreferrer">
-            Directions
-          </a>
+          {event.venue && (
+            <a className="btn btn-line" href={mapsUrl(event.venue)} target="_blank" rel="noreferrer">
+              मार्ग देखें
+            </a>
+          )}
         </div>
       </motion.article>
     </div>
@@ -147,10 +150,10 @@ export default function EventTimeline() {
           मांगलिक कार्यक्रम
         </p>
         <h2 className="font-display mt-2" style={{ fontSize: "clamp(2.2rem, 6vw, 3.6rem)", color: "var(--ivory)" }}>
-          The celebrations
+          उत्सव के पल
         </h2>
         <p className="font-body text-base mt-2 max-w-md" style={{ color: "var(--ivory-muted)" }}>
-          Three days of colour, music and everyone we love.
+          रंग, संगीत और अपनों के साथ खुशियों के चार दिन।
         </p>
       </div>
 
@@ -171,7 +174,7 @@ export default function EventTimeline() {
         </div>
 
         {events.map((event, i) => (
-          <EventCard key={event.title} event={event} index={i} />
+          <EventCard key={event.slug} event={event} index={i} />
         ))}
       </div>
     </section>

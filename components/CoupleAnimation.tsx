@@ -434,7 +434,7 @@ export default function CoupleAnimation() {
             className="font-display"
             style={{ fontSize: "clamp(1.8rem, 5vw, 3rem)", color: "var(--ivory)" }}
           >
-            Two hearts, one journey
+            दो दिल, एक सफ़र
           </p>
         </motion.div>
 
@@ -497,9 +497,9 @@ export default function CoupleAnimation() {
               ))}
               <div
                 className="absolute inset-0 flex items-center justify-center font-hindi italic marigold-text"
-                style={{ fontSize: "2.2rem" }}
+                style={{ fontSize: "1.6rem" }}
               >
-                &amp;
+                संग
               </div>
             </div>
           </motion.div>
@@ -538,7 +538,7 @@ export default function CoupleAnimation() {
           className="absolute bottom-10 font-body text-base pointer-events-none"
           style={{ color: "var(--ivory-muted)", opacity: hintOpacity }}
         >
-          Scroll to bring them together
+          दोनों को मिलाने के लिए नीचे सरकाएँ
         </motion.p>
       </div>
     </section>

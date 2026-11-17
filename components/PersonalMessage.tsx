@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import SectionDecor from "./SectionDecor";
 import { CornerScroll, Damask, GoldRule, LaceStrip } from "./RoyalFrame";
-import { COUPLE } from "@/lib/wedding";
+import { BRIDE_FAMILY, GROOM_FAMILY, VINEET } from "@/lib/wedding";
 
 interface PersonalMessageProps {
   name: string;
@@ -12,12 +12,14 @@ interface PersonalMessageProps {
 
 export default function PersonalMessage({ name, withFamily }: PersonalMessageProps) {
   const salutation = name
-    ? `Dear ${name}${withFamily ? " & family" : ""},`
-    : "Dear guest,";
+    ? `आदरणीय ${name} जी${withFamily ? " सपरिवार" : ""},`
+    : "आदरणीय महानुभाव,";
 
-  const familyLine = withFamily
-    ? "With great joy, we invite you and your entire family to bless our union and celebrate with us."
-    : "With great joy, we invite you to bless our union and celebrate with us.";
+  const familyLine = `परमपिता परमेश्वर की असीम अनुकम्पा से ${BRIDE_FAMILY.name} (${BRIDE_FAMILY.relation} — ${BRIDE_FAMILY.parents}) का शुभ विवाह ${GROOM_FAMILY.name} (${GROOM_FAMILY.relation} — ${GROOM_FAMILY.parents}) के साथ होना निश्चित हुआ है।`;
+
+  const inviteLine = withFamily
+    ? "इस मंगल बेला पर आप सपरिवार सादर आमंत्रित हैं।"
+    : "इस मंगल बेला पर आप सादर आमंत्रित हैं।";
 
   return (
     <section className="relative pt-32 pb-24 px-5 flex flex-col items-center">
@@ -92,7 +94,7 @@ export default function PersonalMessage({ name, withFamily }: PersonalMessagePro
               className="relative font-hindi leading-8 max-w-md mx-auto"
               style={{ fontSize: "clamp(1rem, 2.4vw, 1.12rem)" }}
             >
-              Your presence and blessings would make our happiness complete.
+              {inviteLine} आपकी गरिमामयी उपस्थिति एवं शुभाशीर्वाद ही हमारी प्रसन्नता को पूर्ण करेगा।
             </p>
 
             <div className="relative my-7">
@@ -100,10 +102,10 @@ export default function PersonalMessage({ name, withFamily }: PersonalMessagePro
             </div>
 
             <p className="relative font-body text-sm" style={{ color: "rgba(74,22,32,0.7)" }}>
-              With love,
+              विनीत
             </p>
             <p className="relative font-display gold-foil mt-1" style={{ fontSize: "clamp(1.9rem, 6vw, 2.6rem)" }}>
-              {COUPLE}
+              {VINEET}
             </p>
           </div>
         </div>
@@ -128,7 +130,7 @@ export default function PersonalMessage({ name, withFamily }: PersonalMessagePro
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/ganesh-gold.webp" alt="Shri Ganesh" className="absolute inset-0 w-full h-full object-cover" />
+            <img src="/img/ganesh-gold.webp" alt="श्री गणेश" className="absolute inset-0 w-full h-full object-cover" />
           </div>
         </motion.div>
       </motion.div>

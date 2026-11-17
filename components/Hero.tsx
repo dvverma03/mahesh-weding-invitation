@@ -6,6 +6,14 @@ import { Diya, GarlandStrand, Lotus, Mandala, Paisley, Rangoli } from "./Flowers
 import { BRIDE, CITY, DATE_RANGE, GROOM } from "@/lib/wedding";
 const STRANDS = 15;
 
+/* Split into user-perceived characters so Devanagari matras stay attached */
+function graphemes(text: string) {
+  if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
+    return Array.from(new Intl.Segmenter("hi", { granularity: "grapheme" }).segment(text), (s) => s.segment);
+  }
+  return Array.from(text);
+}
+
 function SplitText({
   text,
   delay = 0,
@@ -17,7 +25,7 @@ function SplitText({
 }) {
   return (
     <span className="inline-flex" aria-label={text}>
-      {text.split("").map((char, i) => (
+      {graphemes(text).map((char, i) => (
         <motion.span
           key={i}
           aria-hidden
@@ -180,7 +188,7 @@ export default function Hero({ ready }: { ready: boolean }) {
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/ganesh-gold.webp" alt="Shri Ganesh" className="absolute inset-0 w-full h-full object-cover" />
+          <img src="/img/ganesh-gold.webp" alt="श्री गणेश" className="absolute inset-0 w-full h-full object-cover" />
         </motion.div>
         <motion.p
           {...fadeUp(0.6)}
@@ -194,7 +202,7 @@ export default function Hero({ ready }: { ready: boolean }) {
           className="font-body font-light text-base sm:text-lg mb-6"
           style={{ color: "var(--ivory-muted)" }}
         >
-          Together with their families
+          शुभ विवाह
         </motion.p>
 
         <h1
@@ -209,7 +217,7 @@ export default function Hero({ ready }: { ready: boolean }) {
             animate={ready ? { opacity: 1, scale: 1, rotate: 0 } : undefined}
             transition={{ duration: 1, delay: 1.5, ease: "backOut" }}
           >
-            &amp;
+            संग
           </motion.span>
           <SplitText text={GROOM} delay={1.7} play={ready} />
         </h1>
@@ -219,7 +227,7 @@ export default function Hero({ ready }: { ready: boolean }) {
           className="font-hindi italic text-lg sm:text-xl mt-6"
           style={{ color: "var(--ivory)" }}
         >
-          request the pleasure of your company
+          के शुभ विवाह में आप सादर आमंत्रित हैं
         </motion.p>
 
         <motion.div {...fadeUp(2.5)} className="flex items-center gap-3 sm:gap-4 mt-6">
@@ -250,7 +258,7 @@ export default function Hero({ ready }: { ready: boolean }) {
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
         style={{ color: "var(--ivory-muted)" }}
       >
-        <span className="font-body text-sm">Scroll down</span>
+        <span className="font-body text-sm">नीचे देखें</span>
         <div
           className="w-px h-10"
           style={{

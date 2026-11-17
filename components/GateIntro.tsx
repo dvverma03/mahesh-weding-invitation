@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GarlandStrand, Mandala, Marigold, Paisley, Rangoli, RosePetal } from "./Flowers";
-import { INITIALS } from "@/lib/wedding";
+import { BRIDE_INITIAL, GROOM_INITIAL } from "@/lib/wedding";
 
 const STRANDS = 13;
 
@@ -93,7 +93,7 @@ function Door({ side, open }: { side: "left" | "right"; open: boolean }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={isLeft ? "/img/ganesh.webp" : "/img/lakshmi.webp"}
-            alt={isLeft ? "Shri Ganesh" : "Goddess Lakshmi"}
+            alt={isLeft ? "श्री गणेश" : "माँ लक्ष्मी"}
             draggable={false}
             className={`absolute inset-0 w-full h-full ${isLeft ? "object-contain" : "object-cover"}`}
             style={{ objectPosition: isLeft ? "50% 60%" : "50% 30%" }}
@@ -188,7 +188,7 @@ export default function GateIntro({ onOpen }: { onOpen: () => void }) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.6 }}
                 transition={{ duration: 0.6, ease: "backOut" }}
-                aria-label="Open the invitation"
+                aria-label="निमंत्रण खोलें"
               >
                 <motion.div
                   className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full flex flex-col items-center justify-center"
@@ -208,7 +208,7 @@ export default function GateIntro({ onOpen }: { onOpen: () => void }) {
                     className="font-display leading-none mt-1"
                     style={{ color: "#5c1a0b", fontSize: "2.4rem" }}
                   >
-                    {INITIALS[0]}<span className="text-2xl mx-0.5">&amp;</span>{INITIALS[2]}
+                    {BRIDE_INITIAL}<span className="text-2xl mx-1">♥</span>{GROOM_INITIAL}
                   </span>
                   {[0, 90, 180, 270].map((r) => (
                     <Marigold
@@ -229,7 +229,7 @@ export default function GateIntro({ onOpen }: { onOpen: () => void }) {
                     border: "1px solid rgba(255,200,87,0.4)",
                   }}
                 >
-                  Tap to open the invitation
+                  निमंत्रण खोलने हेतु स्पर्श करें
                 </span>
               </motion.button>
             )}
