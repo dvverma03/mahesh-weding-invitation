@@ -2,14 +2,24 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Diya, GarlandStrand, Lotus, Mandala, Paisley, Rangoli } from "./Flowers";
+import {
+  Diya,
+  GarlandStrand,
+  Lotus,
+  Mandala,
+  Paisley,
+  Rangoli,
+} from "./Flowers";
 import { BRIDE, CITY, DATE_RANGE, GROOM } from "@/lib/wedding";
 const STRANDS = 15;
 
 /* Split into user-perceived characters so Devanagari matras stay attached */
 function graphemes(text: string) {
   if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
-    return Array.from(new Intl.Segmenter("hi", { granularity: "grapheme" }).segment(text), (s) => s.segment);
+    return Array.from(
+      new Intl.Segmenter("hi", { granularity: "grapheme" }).segment(text),
+      (s) => s.segment,
+    );
   }
   return Array.from(text);
 }
@@ -30,7 +40,11 @@ function SplitText({
           key={i}
           aria-hidden
           initial={{ opacity: 0, y: 60, rotate: -8, filter: "blur(8px)" }}
-          animate={play ? { opacity: 1, y: 0, rotate: 0, filter: "blur(0px)" } : undefined}
+          animate={
+            play
+              ? { opacity: 1, y: 0, rotate: 0, filter: "blur(0px)" }
+              : undefined
+          }
           transition={{
             duration: 0.9,
             delay: delay + i * 0.07,
@@ -104,19 +118,22 @@ export default function Hero({ ready }: { ready: boolean }) {
 
       {/* Mandala */}
       <div className="absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
-      <motion.div style={{ y: mandalaY, rotate: mandalaRotate }}>
-        <motion.div
-          initial={{ scale: 0.4, opacity: 0 }}
-          animate={ready ? { scale: 1, opacity: 1 } : undefined}
-          transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          style={{ color: "rgba(255,202,40,0.26)" }}
-        >
-          <Mandala
-            className="animate-spin-slow"
-            style={{ width: "min(720px, 130vw)", height: "min(720px, 130vw)" }}
-          />
+        <motion.div style={{ y: mandalaY, rotate: mandalaRotate }}>
+          <motion.div
+            initial={{ scale: 0.4, opacity: 0 }}
+            animate={ready ? { scale: 1, opacity: 1 } : undefined}
+            transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            style={{ color: "rgba(255,202,40,0.26)" }}
+          >
+            <Mandala
+              className="animate-spin-slow"
+              style={{
+                width: "min(720px, 130vw)",
+                height: "min(720px, 130vw)",
+              }}
+            />
+          </motion.div>
         </motion.div>
-      </motion.div>
       </div>
 
       {/* Rangolis rising from the lower corners */}
@@ -127,7 +144,11 @@ export default function Hero({ ready }: { ready: boolean }) {
         animate={ready ? { scale: 1, rotate: 0 } : undefined}
         transition={{ duration: 1.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        <Rangoli variant={0} className="animate-spin-slow" style={{ width: "min(56vw, 380px)", height: "min(56vw, 380px)" }} />
+        <Rangoli
+          variant={0}
+          className="animate-spin-slow"
+          style={{ width: "min(56vw, 380px)", height: "min(56vw, 380px)" }}
+        />
       </motion.div>
       <motion.div
         aria-hidden
@@ -136,7 +157,11 @@ export default function Hero({ ready }: { ready: boolean }) {
         animate={ready ? { scale: 1, rotate: 0 } : undefined}
         transition={{ duration: 1.6, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
-        <Rangoli variant={2} className="animate-spin-rev" style={{ width: "min(56vw, 380px)", height: "min(56vw, 380px)" }} />
+        <Rangoli
+          variant={2}
+          className="animate-spin-rev"
+          style={{ width: "min(56vw, 380px)", height: "min(56vw, 380px)" }}
+        />
       </motion.div>
 
       {/* Paisleys and lotuses flanking the names */}
@@ -149,7 +174,11 @@ export default function Hero({ ready }: { ready: boolean }) {
       >
         <Paisley size={46} color="#ffca28" />
         <Lotus size={70} />
-        <Paisley size={46} color="#f48fb1" style={{ transform: "scaleX(-1)" }} />
+        <Paisley
+          size={46}
+          color="#f48fb1"
+          style={{ transform: "scaleX(-1)" }}
+        />
       </motion.div>
       <motion.div
         aria-hidden
@@ -158,7 +187,11 @@ export default function Hero({ ready }: { ready: boolean }) {
         animate={ready ? { opacity: 0.9, x: 0 } : undefined}
         transition={{ duration: 1.2, delay: 1.2 }}
       >
-        <Paisley size={46} color="#ffca28" style={{ transform: "scaleX(-1)" }} />
+        <Paisley
+          size={46}
+          color="#ffca28"
+          style={{ transform: "scaleX(-1)" }}
+        />
         <Lotus size={70} />
         <Paisley size={46} color="#f48fb1" />
       </motion.div>
@@ -184,11 +217,16 @@ export default function Hero({ ready }: { ready: boolean }) {
             aspectRatio: "0.86",
             borderRadius: "999px 999px 12px 12px",
             border: "2px solid #ffc857",
-            boxShadow: "0 0 0 3px #7a0e3a, 0 0 0 5px #ffc857, 0 0 36px rgba(255,200,87,0.45)",
+            boxShadow:
+              "0 0 0 3px #7a0e3a, 0 0 0 5px #ffc857, 0 0 36px rgba(255,200,87,0.45)",
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/ganesh-gold.webp" alt="श्री गणेश" className="absolute inset-0 w-full h-full object-cover" />
+          <img
+            src="/img/ganesh-gold.webp"
+            alt="श्री गणेश"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         </motion.div>
         <motion.p
           {...fadeUp(0.6)}
@@ -207,7 +245,10 @@ export default function Hero({ ready }: { ready: boolean }) {
 
         <h1
           className="font-display leading-[0.95]"
-          style={{ fontSize: "clamp(3.6rem, 13vw, 9rem)", color: "var(--ivory)" }}
+          style={{
+            fontSize: "clamp(3.6rem, 13vw, 9rem)",
+            color: "var(--ivory)",
+          }}
         >
           <SplitText text={BRIDE} delay={1.0} play={ready} />
           <motion.span
@@ -230,7 +271,10 @@ export default function Hero({ ready }: { ready: boolean }) {
           के शुभ विवाह में आप सादर आमंत्रित हैं
         </motion.p>
 
-        <motion.div {...fadeUp(2.5)} className="flex items-center gap-3 sm:gap-4 mt-6">
+        <motion.div
+          {...fadeUp(2.5)}
+          className="flex items-center gap-3 sm:gap-4 mt-6"
+        >
           <Diya size={36} />
           <div className="flex flex-col items-center">
             <span
@@ -258,7 +302,6 @@ export default function Hero({ ready }: { ready: boolean }) {
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
         style={{ color: "var(--ivory-muted)" }}
       >
-        <span className="font-body text-sm">नीचे देखें</span>
         <div
           className="w-px h-10"
           style={{
